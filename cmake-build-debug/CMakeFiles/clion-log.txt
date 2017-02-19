@@ -1,4 +1,4 @@
-/Applications/CLion.app/Contents/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server"
+/Applications/CLion.app/Contents/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server"
 -- The C compiler identification is AppleClang 8.0.0.8000042
 -- The CXX compiler identification is AppleClang 8.0.0.8000042
 -- Check for working C compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
@@ -15,4 +15,4 @@
 -- Detecting CXX compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: /Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/cmake-build-debug
+-- Build files have been written to: /Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/cmake-build-debug

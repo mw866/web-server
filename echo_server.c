@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     fprintf(stdout, "----- Echo Server -----\n");
     
     /* all networked programs must create a socket */
-    if ((sock = socket(PF_INET, SOCK_STREAM, 0)) == -1)
+    if ((sock = socket(PF_INET, SOCK_STREAM, 0)) == -1)  //Creating socket
     {
         fprintf(stderr, "Failed creating socket.\n");
         return EXIT_FAILURE;
@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
     {
        cli_size = sizeof(cli_addr);
        if ((client_sock = accept(sock, (struct sockaddr *) &cli_addr,
-                                 &cli_size)) == -1)
+                                 &cli_size)) == -1) //client_socket is like socket ID
        {
            close(sock);
            fprintf(stderr, "Error accepting connection.\n");
@@ -83,19 +83,19 @@ int main(int argc, char* argv[])
        
        readret = 0;
 
-       while((readret = recv(client_sock, buf, BUF_SIZE, 0)) >= 1)
+       while((readret = recv(client_sock, buf, BUF_SIZE, 0)) >= 1) //readret is length of the message received
        {
-           if (send(client_sock, buf, readret, 0) != readret)
+           if (send(client_sock, buf, readret, 0) != readret) //don't send more than received.
            {
                close_socket(client_sock);
                close_socket(sock);
                fprintf(stderr, "Error sending to client.\n");
                return EXIT_FAILURE;
            }
-           memset(buf, 0, BUF_SIZE);
+           memset(buf, 0, BUF_SIZE); //Reset buffer
        } 
 
-       if (readret == -1)
+       if (readret == -1) // Error
        {
            close_socket(client_sock);
            close_socket(sock);

@@ -43,10 +43,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server"
+CMAKE_SOURCE_DIR = "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/cmake-build-debug"
+CMAKE_BINARY_DIR = "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/cmake-build-debug"
 
 # Include any dependencies generated for this target.
 include CMakeFiles/web_server.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/web_server.dir/flags.make
 
 CMakeFiles/web_server.dir/echo_client.c.o: CMakeFiles/web_server.dir/flags.make
 CMakeFiles/web_server.dir/echo_client.c.o: ../echo_client.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/web_server.dir/echo_client.c.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/web_server.dir/echo_client.c.o   -c "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/echo_client.c"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/web_server.dir/echo_client.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/web_server.dir/echo_client.c.o   -c "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/echo_client.c"
 
 CMakeFiles/web_server.dir/echo_client.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/web_server.dir/echo_client.c.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/echo_client.c" > CMakeFiles/web_server.dir/echo_client.c.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/echo_client.c" > CMakeFiles/web_server.dir/echo_client.c.i
 
 CMakeFiles/web_server.dir/echo_client.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/web_server.dir/echo_client.c.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/echo_client.c" -o CMakeFiles/web_server.dir/echo_client.c.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/echo_client.c" -o CMakeFiles/web_server.dir/echo_client.c.s
 
 CMakeFiles/web_server.dir/echo_client.c.o.requires:
 
@@ -83,16 +83,16 @@ CMakeFiles/web_server.dir/echo_client.c.o.provides.build: CMakeFiles/web_server.
 
 CMakeFiles/web_server.dir/echo_server.c.o: CMakeFiles/web_server.dir/flags.make
 CMakeFiles/web_server.dir/echo_server.c.o: ../echo_server.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/web_server.dir/echo_server.c.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/web_server.dir/echo_server.c.o   -c "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/echo_server.c"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/web_server.dir/echo_server.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/web_server.dir/echo_server.c.o   -c "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/echo_server.c"
 
 CMakeFiles/web_server.dir/echo_server.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/web_server.dir/echo_server.c.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/echo_server.c" > CMakeFiles/web_server.dir/echo_server.c.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/echo_server.c" > CMakeFiles/web_server.dir/echo_server.c.i
 
 CMakeFiles/web_server.dir/echo_server.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/web_server.dir/echo_server.c.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/echo_server.c" -o CMakeFiles/web_server.dir/echo_server.c.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/echo_server.c" -o CMakeFiles/web_server.dir/echo_server.c.s
 
 CMakeFiles/web_server.dir/echo_server.c.o.requires:
 
@@ -117,7 +117,7 @@ web_server: CMakeFiles/web_server.dir/echo_client.c.o
 web_server: CMakeFiles/web_server.dir/echo_server.c.o
 web_server: CMakeFiles/web_server.dir/build.make
 web_server: CMakeFiles/web_server.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable web_server"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable web_server"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/web_server.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -135,6 +135,6 @@ CMakeFiles/web_server.dir/clean:
 .PHONY : CMakeFiles/web_server.dir/clean
 
 CMakeFiles/web_server.dir/depend:
-	cd "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/cmake-build-debug" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server" "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server" "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/cmake-build-debug" "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/cmake-build-debug" "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/cmake-build-debug/CMakeFiles/web_server.dir/DependInfo.cmake" --color=$(COLOR)
+	cd "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/cmake-build-debug" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server" "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server" "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/cmake-build-debug" "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/cmake-build-debug" "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/cmake-build-debug/CMakeFiles/web_server.dir/DependInfo.cmake" --color=$(COLOR)
 .PHONY : CMakeFiles/web_server.dir/depend
 

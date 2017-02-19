@@ -1,4 +1,4 @@
-# Install script for directory: /Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server
+# Install script for directory: /Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -35,5 +35,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab 1/web_server/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/kylin1989/Google Drive/Cornell Tech/Academic/CS 5450 Networked and Distributed Computing/Assignment/Lab1/web_server/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

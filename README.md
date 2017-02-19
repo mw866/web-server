@@ -27,6 +27,18 @@
 * Explanation of software compilation: https://help.ubuntu.com/community/CompilingSoftware
 
 * Annotated Excerpted RFC 2616 Text: https://pages.github.coecis.cornell.edu/cs5450/website/assignments/p1/rfc.txt
+
+* CMU Liso Projects: https://github.com/wshen0123/cmu-15641-lisod
+
+**  https://github.com/zhuansunxt/Liso
+
+** https://github.com/mindbergh/Liso
+
+** https://github.com/mydagobah/Lisod
+
+** https://github.com/wshen0123/cmu-15641-lisod
+
+
 ## Troubleshooting
 
 ### Error: Cannot load symbol file
@@ -48,3 +60,5 @@ Use argument when running ./configure :
         --disable-werror
 
 http://stackoverflow.com/questions/20426213/error-building-ellcc
+
+
