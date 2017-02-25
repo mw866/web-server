@@ -1,24 +1,3 @@
-################################################################################
-# Makefile                                                                     #
-#                                                                              #
-# Description: This file contains the make rules for Recitation 1.             #
-#                                                                              #
-# Authors: Athula Balachandran <abalacha@cs.cmu.edu>,                          #
-#          Wolf Richter <wolf@cs.cmu.edu>                                      #
-#                                                                              #
-################################################################################
-
-# default: echo_server echo_client
-
-# echo_server:
-# 	@gcc echo_server.c -o echo_server -Wall -Werror
-
-# echo_client:
-# 	@gcc echo_client.c -o echo_client -Wall -Werror
-
-# clean:
-# 	@rm echo_server echo_client
-
 CC=gcc
 CFLAGS=-I.
 DEPS = parse.h y.tab.h
@@ -40,12 +19,6 @@ y.tab.c: parser.y
 select_server: $(OBJ)
 	#@gcc select_server.c -o select_server -Wall -Werror
 	$(CC) -o $@ $^ $(CFLAGS)
-
-echo_server:
-	@gcc echo_server.c -o echo_server -Wall -Werror
-
-echo_client:
-	@gcc echo_client.c -o echo_client -Wall -Werror
 
 clean:
 	#@rm select_server echo_client
