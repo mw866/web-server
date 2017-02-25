@@ -37,6 +37,8 @@
 
 ** https://github.com/mydagobah/Lisod
 
+* Makefile Tutorial: http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
+
 
 ## Troubleshooting
 
