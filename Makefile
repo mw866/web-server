@@ -5,7 +5,7 @@ OBJ = y.tab.o lex.yy.o parse.o select_server.o
 FLAGS = -g -Wall
 
 
-default: select_server echo_client echo_server
+default: select_server
 
 lex.yy.c: lexer.l
 	flex $^

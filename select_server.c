@@ -27,6 +27,12 @@ void *get_in_addr(struct sockaddr *sa)
 	return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
+void append(char*s, size_t size, char c) {
+     int len = strlen(s);
+     s[len] = c;
+     s[len+1] = '\0';
+}
+
 int main(void)
 {
     fd_set master;    // master file descriptor list
@@ -160,12 +166,21 @@ int main(void)
                         printf("Request Header\n");
                         printf("Header name %s Header Value %s\n",request->headers[index].header_name,request->headers[index].header_value);
                         }
-                
+                        printf("%d", strlen(request->http_uri));
+
+                        char * stringisend = malloc (2000);
+
+                        strcpy(stringisend, request->http_version);
+                        append(stringisend, strlen(stringisend), '\n');
+                        printf("\n%s\n", stringisend);
                         // if (send(i, buf, nbytes, 0) == -1) {
                         //     perror("send");
                         // }
-                        if (send(i, request->http_uri, sizeof(request->http_uri), 0) == -1) {
-                            perror("send");
+                        if (send(i, stringisend, strlen(stringisend), 0) == -1) {
+                            perror("Error sending");
+                        }else{
+                            printf("sent:%s\n",request->http_uri);
+
                         }
 
     
