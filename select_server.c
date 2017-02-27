@@ -163,15 +163,15 @@ if (p == NULL) {
                         char* response = malloc(4096);
                         processRequest(buf, nbytes,response);
                         printf("line 164\n");
-                        printf(response);
+                        printf(response); 
                         append(response, strlen(response), '\r\n');
 
                         printf("size of response: %d\n", strlen(response));
 
                         char* response2 = malloc(433);
-                        strcpy(response2,"HTTP/1.1\r\n");
+                        strcpy(response2,"HTTP/1.1 \r\n");
     
-                        if (send(i, response2, strlen(response2), 0) == -1) {
+                        if (send(i, response, strlen(response), 0) == -1) {
                             printf("Error sending");
                         }else{
                             printf("SENT RESPONSE! :D");
@@ -208,11 +208,12 @@ void processRequest(char* buf, int nbytes, char* response) {
      // strcpy(response, "");
     // memset(response, 0, sizeof(response));
 
-    //respond_HTTP_ver(request->http_version, response);
-
-    strcpy(response, request->http_version);
-    if (strcmp(request->http_version , "HTTP/1.1"))
-        strcat(response, STATUS_505);
+    char *header = malloc(4096);
+    //put a space infront of the header
+    strcat(header, " ");
+    respond_HTTP_ver(request->http_version, header);
+    strcat(header, "\r\n");
+    strcpy(response, header);
 
     char path[1024];
     if (!strcmp(request->http_method, "HEAD")  || !strcmp(request->http_method, "GET") ) {
@@ -263,10 +264,10 @@ void processRequest(char* buf, int nbytes, char* response) {
     // append(response, strlen(response), '\n');
 } 
 
-void respond_HTTP_ver(char* http_ver, char* response){
-    strcpy(response, http_ver);
+void respond_HTTP_ver(char* http_ver, char* header){
+    strcpy(header, http_ver);
     if (strcmp(http_ver , "HTTP/1.1"))
-        strcat(response, STATUS_505);
+        strcat(header, STATUS_505);
 }   
 
 
