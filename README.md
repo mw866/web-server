@@ -1,4 +1,40 @@
+## Response Header Format
+### RFC2616 
 
+
+       Response      = Status-Line               ; Section 6.1
+                       *(( general-header        ; Section 4.5
+                        | response-header        ; Section 6.2
+                        | entity-header ) CRLF)  ; Section 7.1
+                       CRLF
+                       [ message-body ]          ; Section 7.2
+
+### Example Response Header 
+
+
+        HTTP/1.1 200 OK
+        access-control-allow-origin: *
+        cache-control: max-age=60
+        content-security-policy: default-src 'self' blob: https://*.cnn.com:* http://*.cnn.com:* *.cnn.io:* *.cnn.net:* *.turner.com:* *.turner.io:* *.ugdturner.com:* *.vgtf.net:*; script-src 'unsafe-eval' 'unsafe-inline' 'self' *; style-src 'unsafe-inline' 'self' blob: *; child-src 'self' blob: *; frame-src 'self' *; object-src 'self' *; img-src 'self' data: blob: *; media-src 'self' blob: *; font-src 'self' data: *; connect-src 'self' *;
+        Content-Type: text/html; charset=utf-8
+        x-content-type-options: nosniff
+        x-servedByHost: ::ffff:10.61.5.146
+        x-xss-protection: 1; mode=block
+        Via: 1.1 varnish
+        Fastly-Debug-Digest: 1e206303e0672a50569b0c0a29903ca81f3ef5033de74682ce90ec9d13686981
+        Content-Length: 131114
+        Accept-Ranges: bytes
+        Date: Mon, 27 Feb 2017 20:18:07 GMT
+        Via: 1.1 varnish
+        Age: 205
+        Connection: keep-alive
+        Set-Cookie: countryCode=US; Domain=.cnn.com; Path=/
+        Set-Cookie: geoData=Ithaca|NY|14853|US|NA; Domain=.cnn.com; Path=/
+        X-Served-By: cache-iad2142-IAD, cache-bos8233-BOS
+        X-Cache: HIT, HIT
+        X-Cache-Hits: 2, 5
+        X-Timer: S1488226687.252677,VS0,VE0
+        Vary: Accept-Encoding
 
 
 ## Instructions

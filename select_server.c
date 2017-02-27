@@ -164,12 +164,12 @@ if (p == NULL) {
                         processRequest(buf, nbytes,response);
                         printf("line 164\n");
                         printf(response);
-                        append(response, strlen(response), '\n');
+                        append(response, strlen(response), '\r\n');
 
                         printf("size of response: %d\n", strlen(response));
 
                         char* response2 = malloc(433);
-                        strcpy(response2,"just a response\n");
+                        strcpy(response2,"HTTP/1.1\r\n");
     
                         if (send(i, response2, strlen(response2), 0) == -1) {
                             printf("Error sending");
