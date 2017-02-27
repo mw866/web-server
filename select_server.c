@@ -25,6 +25,8 @@
  char* STATUS_503 = "503_SERVICE_UNAVAILABLE\n";
  char* STATUS_505 = "505_HTTP_VERSION_NOT_SUPPORTED\n";
 
+ void processRequest(char*, int, char* );
+ void respond_HTTP_ver(char* , char* );
 
 // get sockaddr, IPv4 or IPv6:
 void *get_in_addr(struct sockaddr *sa)
@@ -163,8 +165,9 @@ if (p == NULL) {
                         char* response = malloc(4096);
                         processRequest(buf, nbytes,response);
                         printf("line 164\n");
-                        printf(response); 
-                        append(response, strlen(response), '\r\n');
+                        printf("%s\n", response); 
+                        //append(response, strlen(response), '\n');
+                        strcat(response, "\r\n");
 
                         printf("size of response: %d\n", strlen(response));
 
@@ -178,7 +181,6 @@ if (p == NULL) {
                             // printf(response);
 
                         }
-
 
                     }
                 } // END handle data from client
@@ -210,7 +212,7 @@ void processRequest(char* buf, int nbytes, char* response) {
 
     char *header = malloc(4096);
     //put a space infront of the header
-    strcat(header, " ");
+    strcpy(header, " ");
     respond_HTTP_ver(request->http_version, header);
     strcat(header, "\r\n");
     strcpy(response, header);
@@ -245,13 +247,12 @@ void processRequest(char* buf, int nbytes, char* response) {
                 if(fd_in < 0) {
                     printf("Error 501: Failed to open the file\n"); 
                     strcat(response, STATUS_501);                    
-                    return 0;
                 }
                 int content_length = read(fd_in,file_buf,8192);
                 strcat(response, file_buf);
                 //append(response, strlen(response), '\r\n');
                 strcat(response, "\r\n");
-                printf(response); 
+                printf("%s\n",response); 
            }
 
         }
@@ -265,7 +266,7 @@ void processRequest(char* buf, int nbytes, char* response) {
 } 
 
 void respond_HTTP_ver(char* http_ver, char* header){
-    strcpy(header, http_ver);
+    strcat(header, http_ver);
     if (strcmp(http_ver , "HTTP/1.1"))
         strcat(header, STATUS_505);
 }   
