@@ -162,14 +162,15 @@ if (p == NULL) {
                         printf("%s", buf);
                         printf("%d", nbytes);
 
-                        char* response = malloc(4096);
+                        char* response = malloc(20000);
                         processRequest(buf, nbytes,response);
-
-                        printf("%s\n", response); 
 
                         strcat(response, "\r\n");
 
                         printf("size of response: %d\n", strlen(response));
+                        
+                        printf("Printing Resposne before sending it to client:\n"); 
+                        printf("%s\n", response); 
     
                         if (send(i, response, strlen(response), 0) == -1) {
                             printf("Error sending");
@@ -214,7 +215,6 @@ void processRequest(char* buf, int nbytes, char* response) {
 
     if (!strcmp(request->http_method, "HEAD")  || !strcmp(request->http_method, "GET")) {
         respond_get_or_head(request, response);
-        printf(response);
     }
 
 
@@ -289,7 +289,7 @@ const char *file_ext(const char *filename) {
 void respond_get_or_head(Request * request, char * response) {
 
   char header[4096];
-  char body[8192];
+  char body[10000];
 
   if(access(request->http_uri, F_OK ) != -1 ) {
       // if (result != -1) {
@@ -299,29 +299,19 @@ void respond_get_or_head(Request * request, char * response) {
       strcat(header, "Server: select_server/1.0\n");
 
       strcat(header, "Connection: keep-alive\r\n");
-
-      // Get file length
-      // FILE * fp = fopen(request->http_uri, "rb");
-      // int prev=ftell(fp);
-      // fseek(fp, 0L, SEEK_END);
-
-      // int sz=ftell(fp);
-      // fseek(fp,prev,SEEK_SET);
-      // char length[200];
-      // sprintf(length, "%d", sz);
-      // strcat(header, "Content-length: ");
-      // strcat(header, length);
-      // strcat(header,"\n");
       
       //read from file 
       int fd_in = open(request->http_uri, O_RDONLY);
-      char file_buf[8192];
+      char file_buf[10000];
+      strcpy(file_buf, " ");
       if(fd_in < 0) {
           printf("Error 501: Failed to open the file\n"); 
           strcat(response, STATUS_501);
           exit(-1);                   
       }
-      int content_length = read(fd_in,file_buf,8192);
+      int content_length = read(fd_in,file_buf,10000);
+      printf("File Buf is!! : \n%s\n", file_buf);
+      printf("************");
       //strcat(response, file_buf);
       char content_length_str[100];
       sprintf(content_length_str, "%d", content_length);
@@ -330,8 +320,7 @@ void respond_get_or_head(Request * request, char * response) {
       strcat(header,"\n");
 
       if(!strcmp(request->http_method, "GET")){
-        strcat(body, file_buf);
-        strcat(body, "\r\n");
+        strcpy(body, file_buf);
       }
 
       // Content type
