@@ -14,6 +14,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "parse.h"
+#include <time.h>
 
 
 #define PORT "9034"   // port we're listening on
@@ -156,7 +157,6 @@ if (p == NULL) {
                         FD_CLR(i, &master); // remove from master set
                     } else {
                         // we got some data from a client
-                        printf("Fdmax equals %d\n", fdmax);
                         //Parse the buffer to the parse function. You will need to pass the socket fd and the buffer would need to
                         //be read from that fd
                         printf("%s", buf);
@@ -164,24 +164,20 @@ if (p == NULL) {
 
                         char* response = malloc(4096);
                         processRequest(buf, nbytes,response);
-                        printf("line 164\n");
+
                         printf("%s\n", response); 
-                        //append(response, strlen(response), '\n');
+
                         strcat(response, "\r\n");
 
                         printf("size of response: %d\n", strlen(response));
-
-                        char* response2 = malloc(433);
-                        strcpy(response2,"HTTP/1.1 \r\n");
     
                         if (send(i, response, strlen(response), 0) == -1) {
                             printf("Error sending");
                         }else{
                             printf("SENT RESPONSE! :D");
                             // printf(response);
-
                         }
-
+                         free(response);
                     }
                 } // END handle data from client
             } // END got new incoming connection
@@ -210,66 +206,169 @@ void processRequest(char* buf, int nbytes, char* response) {
      // strcpy(response, "");
     // memset(response, 0, sizeof(response));
 
-    char *header = malloc(4096);
-    //put a space infront of the header
-    strcpy(header, " ");
-    respond_HTTP_ver(request->http_version, header);
-    strcat(header, "\r\n");
-    strcpy(response, header);
+    // char *header = malloc(4096);
+    // //put a space infront of the header
+    // strcpy(header, " ");
+    respond_HTTP_ver(request->http_version, response);
+    strcat(response, " ");
 
-    char path[1024];
-    if (!strcmp(request->http_method, "HEAD")  || !strcmp(request->http_method, "GET") ) {
-
-        if (getcwd(path, sizeof(path)) != NULL) {
-            fprintf(stdout, "Current working dir: %s\n", path);
-
-
-            strcat(path,request->http_uri);
-            fprintf(stdout, "Full path is: %s\n", path);
-
-            int result = access (path, F_OK); // F_OK tests existence also (R_OK,W_OK,X_OK).
-                                              //            for readable, writeable, executable
-            if ( result == 0 ) {
-               printf("%s exists!!\n",path);
-               }
-            else  {
-                   printf("ERROR: %s doesn't exist!\n",path); 
-                   strcat(response, STATUS_404);
-
-               }
-
-           // printf("Printing METHID %s\n",request->http_method);
-           if (!strcmp(request->http_method, "GET")){
-                 printf("line 227");  
-
-                int fd_in = open(path, O_RDONLY);
-                char file_buf[8192];
-                if(fd_in < 0) {
-                    printf("Error 501: Failed to open the file\n"); 
-                    strcat(response, STATUS_501);                    
-                }
-                int content_length = read(fd_in,file_buf,8192);
-                strcat(response, file_buf);
-                //append(response, strlen(response), '\r\n');
-                strcat(response, "\r\n");
-                printf("%s\n",response); 
-           }
-
-        }
-        else {
-                perror("getcwd() error");
-            }
+    if (!strcmp(request->http_method, "HEAD")  || !strcmp(request->http_method, "GET")) {
+        printf("Head request");
+        respond_get_head(request, response);
+        printf(response);
     }
+
+
+
+    //char path[1024];
+    // if (!strcmp(request->http_method, "HEAD")  || !strcmp(request->http_method, "GET") ) {
+
+    //     if (getcwd(path, sizeof(path)) != NULL) {
+    //         fprintf(stdout, "Current working dir: %s\n", path);
+
+
+    //         strcat(path,request->http_uri);
+    //         fprintf(stdout, "Full path is: %s\n", path);
+
+    //         int result = access (path, F_OK); // F_OK tests existence also (R_OK,W_OK,X_OK).
+    //                                           //            for readable, writeable, executable
+    //         if ( result == 0 ) {
+    //            printf("%s exists!!\n",path);
+    //            strcat(response, STATUS_200);
+    //            strcat(response, "\r\n");
+    //            }
+    //         else  {
+    //                printf("ERROR: %s doesn't exist!\n",path); 
+    //                strcat(response, STATUS_404);
+    //                strcat(response, "\r\n");
+    //            }
+
+    //        // printf("Printing METHID %s\n",request->http_method);
+    //        if (!strcmp(request->http_method, "GET")){
+    //              printf("line 227");  
+
+    //             int fd_in = open(path, O_RDONLY);
+    //             char file_buf[8192];
+    //             if(fd_in < 0) {
+    //                 printf("Error 501: Failed to open the file\n"); 
+    //                 strcat(response, STATUS_501);                    
+    //             }
+    //             int content_length = read(fd_in,file_buf,8192);
+    //             strcat(response, file_buf);
+    //             //append(response, strlen(response), '\r\n');
+    //             //strcat(response, "\r\n");
+    //             printf("%s\n",response); 
+    //        }
+
+    //     }
+    //     else {
+    //             perror("getcwd() error");
+    //         }
+    // }
     
     // strcpy(response, file_buf);
     // append(response, strlen(response), '\n');
+}
+
+
+void respond_HTTP_ver(char* http_ver, char* response){
+    strcpy(response, http_ver);
+    if (strcmp(http_ver , "HTTP/1.1"))
+        strcpy(response, STATUS_505);
 } 
 
-void respond_HTTP_ver(char* http_ver, char* header){
-    strcat(header, http_ver);
-    if (strcmp(http_ver , "HTTP/1.1"))
-        strcat(header, STATUS_505);
-}   
+const char *get_filename_ext(const char *filename) {
+    const char *dot = strrchr(filename, '.');
+    if(!dot || dot == filename) return "";
+    return dot + 1;
+}
+
+void respond_get_head(Request * request, char * response) {
+
+  char resp[10000];
+
+  if( access( request->http_uri, F_OK ) != -1 ) {
+
+      strcpy(resp, STATUS_200);
+
+      strcat(resp, "Server: select_server/1.0\n");
+
+      strcat(resp, "Connection: keep-alive\r\n");
+
+      // Get file length
+      FILE * fp = fopen(request->http_uri, "rb");
+      int prev=ftell(fp);
+      fseek(fp, 0L, SEEK_END);
+
+      int sz=ftell(fp);
+      fseek(fp,prev,SEEK_SET);
+      char length[200];
+      sprintf(length, "%d", sz);
+      strcat(resp, "Content-length: ");
+      strcat(resp, length);
+      strcat(resp,"\n");
+
+      // Content type
+      char buff_CT[1000];
+
+      
+      //TODO: SWITCH 
+      if (get_filename_ext(request->http_uri) == "html") {
+          strcpy(buff_CT, "text/html");
+      }
+      else if (get_filename_ext(request->http_uri) == "css") {
+          strcpy(buff_CT, "text/css");
+      }
+      else if (get_filename_ext(request->http_uri) == "png") {
+          strcpy(buff_CT, "image/png");
+      }
+      else if (get_filename_ext(request->http_uri) == "jpeg") {
+          strcpy(buff_CT, "image/jpeg");
+      }
+      else if (get_filename_ext(request->http_uri) == "gif") {
+          strcpy(buff_CT, "image/gif");
+      }
+      else if (get_filename_ext(request->http_uri) == "txt") {
+          strcpy(buff_CT, "text/plain");
+      }
+      else { // default
+          strcpy(buff_CT, "application/octet-stream");
+      }
+
+      strcat(resp, "Content-Type: ");
+      strcat(resp, buff_CT);
+      strcat(resp,"\n");
+
+      // Get Date
+      char buf_t[500];
+      time_t now = time(0);
+      struct tm tm = *gmtime(&now);
+      strftime(buf_t, sizeof buf_t, "%a, %d %b %Y %H:%M:%S %Z", &tm);
+      strcat(resp, "Date: ");
+      strcat(resp, buf_t);
+      strcat(resp, "\n");
+
+      // Get Last date modified of file
+      struct stat attr;
+      stat(request->http_uri, &attr);
+      char buf_LM[500];
+      // NEED TO FORMAT THIS STRING LIKE ABOVE ONE
+      // sprintf(buf_LM, "%a, %d %b %Y %H:%M:%S %Z", ctime(&attr.st_mtime));
+      strcat(resp, "Last-Modified: ");
+      strcat(resp, ctime(&attr.st_mtime));
+      strcat(resp, "\n");
+
+  } else { // File doesn't exist: Respond with an error
+      printf("FILE DOES NOT EXIST");
+  }
+
+  strcat(resp, "\r\n");
+  strcat(response, resp);
+}
+
+
+
+
 
 
 
