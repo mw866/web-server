@@ -213,14 +213,13 @@ void processRequest(char* buf, int nbytes, char* response) {
     strcat(response, " ");
 
     if (!strcmp(request->http_method, "HEAD")  || !strcmp(request->http_method, "GET")) {
-        printf("Head request");
-        respond_get_head(request, response);
+        respond_get_or_head(request, response);
         printf(response);
     }
 
 
-
-    //char path[1024];
+//DELETEEEE THIS 
+    // char path[1024];
     // if (!strcmp(request->http_method, "HEAD")  || !strcmp(request->http_method, "GET") ) {
 
     //     if (getcwd(path, sizeof(path)) != NULL) {
@@ -230,7 +229,7 @@ void processRequest(char* buf, int nbytes, char* response) {
     //         strcat(path,request->http_uri);
     //         fprintf(stdout, "Full path is: %s\n", path);
 
-    //         int result = access (path, F_OK); // F_OK tests existence also (R_OK,W_OK,X_OK).
+    //         int result = access(path, F_OK); // F_OK tests existence also (R_OK,W_OK,X_OK).
     //                                           //            for readable, writeable, executable
     //         if ( result == 0 ) {
     //            printf("%s exists!!\n",path);
@@ -265,6 +264,8 @@ void processRequest(char* buf, int nbytes, char* response) {
     //             perror("getcwd() error");
     //         }
     // }
+
+//DELETE ABOVE
     
     // strcpy(response, file_buf);
     // append(response, strlen(response), '\n');
@@ -277,93 +278,100 @@ void respond_HTTP_ver(char* http_ver, char* response){
         strcpy(response, STATUS_505);
 } 
 
-const char *get_filename_ext(const char *filename) {
-    const char *dot = strrchr(filename, '.');
-    if(!dot || dot == filename) return "";
-    return dot + 1;
+const char *file_ext(const char *filename) {
+    const char *period = strrchr(filename, '.');
+    if(!period || period == filename){
+      return "";  
+    }     
+    return period + 1;
 }
 
-void respond_get_head(Request * request, char * response) {
+void respond_get_or_head(Request * request, char * response) {
 
-  char resp[10000];
+  char header[4096];
+  char path[1024];
 
-  if( access( request->http_uri, F_OK ) != -1 ) {
+  if (getcwd(path, sizeof(path)) != NULL) {
+      fprintf(stdout, "Current working dir: %s\n", path);
+      strcat(path,request->http_uri);
+      fprintf(stdout, "Full path is: %s\n", path);
 
-      strcpy(resp, STATUS_200);
+      int result = access(path, F_OK);
+      // if(access(path, F_OK ) != -1 ) {
+      if (result != -1) {
+          printf("I am here!! ");
+          strcpy(header, STATUS_200);
 
-      strcat(resp, "Server: select_server/1.0\n");
+          strcat(header, "Server: select_server/1.0\n");
 
-      strcat(resp, "Connection: keep-alive\r\n");
+          strcat(header, "Connection: keep-alive\r\n");
 
-      // Get file length
-      FILE * fp = fopen(request->http_uri, "rb");
-      int prev=ftell(fp);
-      fseek(fp, 0L, SEEK_END);
+          // Get file length
+          FILE * fp = fopen(request->http_uri, "rb");
+          int prev=ftell(fp);
+          fseek(fp, 0L, SEEK_END);
 
-      int sz=ftell(fp);
-      fseek(fp,prev,SEEK_SET);
-      char length[200];
-      sprintf(length, "%d", sz);
-      strcat(resp, "Content-length: ");
-      strcat(resp, length);
-      strcat(resp,"\n");
+          int sz=ftell(fp);
+          fseek(fp,prev,SEEK_SET);
+          char length[200];
+          sprintf(length, "%d", sz);
+          strcat(header, "Content-length: ");
+          strcat(header, length);
+          strcat(header,"\n");
 
-      // Content type
-      char buff_CT[1000];
+          // Content type
+          char ext[1024];
 
-      
-      //TODO: SWITCH 
-      if (get_filename_ext(request->http_uri) == "html") {
-          strcpy(buff_CT, "text/html");
+          
+         //TODO: USE SWITCH
+        if (file_ext(request->http_uri) == "html") {
+            strcpy(ext, "text/html");
+        }
+        else if (file_ext(request->http_uri) == "css") {
+            strcpy(ext, "text/css");
+        }
+        else if (file_ext(request->http_uri) == "txt") {
+            strcpy(ext, "text/plain");
+        }
+        else { // default
+            strcpy(ext, "application/octet-stream");
+        }
+
+          strcat(header, "Content-Type: ");
+          strcat(header, ext);
+          strcat(header,"\n");
+
+          // Get Date
+          char get_time[500];
+          time_t now = time(0);
+          struct tm tm = *gmtime(&now);
+          strftime(get_time, sizeof get_time, "%a, %d %b %Y %H:%M:%S %Z", &tm);
+          strcat(header, "Date: ");
+          strcat(header, get_time);
+          strcat(header, "\n");
+
+          // Get Last date modified of file
+          struct stat attr;
+          stat(request->http_uri, &attr);
+          char buf_LM[500];
+          // NEED TO FORMAT THIS STRING LIKE ABOVE ONE
+          // sprintf(buf_LM, "%a, %d %b %Y %H:%M:%S %Z", ctime(&attr.st_mtime));
+          strcat(header, "Last-Modified: ");
+          strcat(header, ctime(&attr.st_mtime));
+          strcat(header, "\n");
+
+      } else { // File doesn't exist: Respond with an error
+          printf("FILE DOES NOT EXIST");
       }
-      else if (get_filename_ext(request->http_uri) == "css") {
-          strcpy(buff_CT, "text/css");
-      }
-      else if (get_filename_ext(request->http_uri) == "png") {
-          strcpy(buff_CT, "image/png");
-      }
-      else if (get_filename_ext(request->http_uri) == "jpeg") {
-          strcpy(buff_CT, "image/jpeg");
-      }
-      else if (get_filename_ext(request->http_uri) == "gif") {
-          strcpy(buff_CT, "image/gif");
-      }
-      else if (get_filename_ext(request->http_uri) == "txt") {
-          strcpy(buff_CT, "text/plain");
-      }
-      else { // default
-          strcpy(buff_CT, "application/octet-stream");
-      }
+    }
+    else{
+        strcat(header, STATUS_500);
+        printf("Internal ERROR");
+    }
 
-      strcat(resp, "Content-Type: ");
-      strcat(resp, buff_CT);
-      strcat(resp,"\n");
+  strcat(header, "\r\n");
+  strcat(response, header);
 
-      // Get Date
-      char buf_t[500];
-      time_t now = time(0);
-      struct tm tm = *gmtime(&now);
-      strftime(buf_t, sizeof buf_t, "%a, %d %b %Y %H:%M:%S %Z", &tm);
-      strcat(resp, "Date: ");
-      strcat(resp, buf_t);
-      strcat(resp, "\n");
-
-      // Get Last date modified of file
-      struct stat attr;
-      stat(request->http_uri, &attr);
-      char buf_LM[500];
-      // NEED TO FORMAT THIS STRING LIKE ABOVE ONE
-      // sprintf(buf_LM, "%a, %d %b %Y %H:%M:%S %Z", ctime(&attr.st_mtime));
-      strcat(resp, "Last-Modified: ");
-      strcat(resp, ctime(&attr.st_mtime));
-      strcat(resp, "\n");
-
-  } else { // File doesn't exist: Respond with an error
-      printf("FILE DOES NOT EXIST");
-  }
-
-  strcat(resp, "\r\n");
-  strcat(response, resp);
 }
 
 
