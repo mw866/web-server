@@ -289,88 +289,103 @@ const char *file_ext(const char *filename) {
 void respond_get_or_head(Request * request, char * response) {
 
   char header[4096];
-  char path[1024];
+  char body[8192];
 
-  if (getcwd(path, sizeof(path)) != NULL) {
-      fprintf(stdout, "Current working dir: %s\n", path);
-      strcat(path,request->http_uri);
-      fprintf(stdout, "Full path is: %s\n", path);
+  if(access(request->http_uri, F_OK ) != -1 ) {
+      // if (result != -1) {
+      printf("I am here!! ");
+      strcpy(header, STATUS_200);
 
-      int result = access(path, F_OK);
-      // if(access(path, F_OK ) != -1 ) {
-      if (result != -1) {
-          printf("I am here!! ");
-          strcpy(header, STATUS_200);
+      strcat(header, "Server: select_server/1.0\n");
 
-          strcat(header, "Server: select_server/1.0\n");
+      strcat(header, "Connection: keep-alive\r\n");
 
-          strcat(header, "Connection: keep-alive\r\n");
+      // Get file length
+      // FILE * fp = fopen(request->http_uri, "rb");
+      // int prev=ftell(fp);
+      // fseek(fp, 0L, SEEK_END);
 
-          // Get file length
-          FILE * fp = fopen(request->http_uri, "rb");
-          int prev=ftell(fp);
-          fseek(fp, 0L, SEEK_END);
-
-          int sz=ftell(fp);
-          fseek(fp,prev,SEEK_SET);
-          char length[200];
-          sprintf(length, "%d", sz);
-          strcat(header, "Content-length: ");
-          strcat(header, length);
-          strcat(header,"\n");
-
-          // Content type
-          char ext[1024];
-
-          
-         //TODO: USE SWITCH
-        if (file_ext(request->http_uri) == "html") {
-            strcpy(ext, "text/html");
-        }
-        else if (file_ext(request->http_uri) == "css") {
-            strcpy(ext, "text/css");
-        }
-        else if (file_ext(request->http_uri) == "txt") {
-            strcpy(ext, "text/plain");
-        }
-        else { // default
-            strcpy(ext, "application/octet-stream");
-        }
-
-          strcat(header, "Content-Type: ");
-          strcat(header, ext);
-          strcat(header,"\n");
-
-          // Get Date
-          char get_time[500];
-          time_t now = time(0);
-          struct tm tm = *gmtime(&now);
-          strftime(get_time, sizeof get_time, "%a, %d %b %Y %H:%M:%S %Z", &tm);
-          strcat(header, "Date: ");
-          strcat(header, get_time);
-          strcat(header, "\n");
-
-          // Get Last date modified of file
-          struct stat attr;
-          stat(request->http_uri, &attr);
-          char buf_LM[500];
-          // NEED TO FORMAT THIS STRING LIKE ABOVE ONE
-          // sprintf(buf_LM, "%a, %d %b %Y %H:%M:%S %Z", ctime(&attr.st_mtime));
-          strcat(header, "Last-Modified: ");
-          strcat(header, ctime(&attr.st_mtime));
-          strcat(header, "\n");
-
-      } else { // File doesn't exist: Respond with an error
-          printf("FILE DOES NOT EXIST");
+      // int sz=ftell(fp);
+      // fseek(fp,prev,SEEK_SET);
+      // char length[200];
+      // sprintf(length, "%d", sz);
+      // strcat(header, "Content-length: ");
+      // strcat(header, length);
+      // strcat(header,"\n");
+      
+      //read from file 
+      int fd_in = open(request->http_uri, O_RDONLY);
+      char file_buf[8192];
+      if(fd_in < 0) {
+          printf("Error 501: Failed to open the file\n"); 
+          strcat(response, STATUS_501);
+          exit(-1);                   
       }
+      int content_length = read(fd_in,file_buf,8192);
+      //strcat(response, file_buf);
+      char content_length_str[100];
+      sprintf(content_length_str, "%d", content_length);
+      strcat(header, "Content-length: ");
+      strcat(header, content_length_str);
+      strcat(header,"\n");
+
+      if(!strcmp(request->http_method, "GET")){
+        strcat(body, file_buf);
+        strcat(body, "\r\n");
+      }
+
+      // Content type
+      char ext[1024];
+
+      
+     //TODO: USE SWITCH
+    if (file_ext(request->http_uri) == "html") {
+        strcpy(ext, "text/html");
+    }
+    else if (file_ext(request->http_uri) == "css") {
+        strcpy(ext, "text/css");
+    }
+    else if (file_ext(request->http_uri) == "txt") {
+        strcpy(ext, "text/plain");
+    }
+    else { // default
+        strcpy(ext, "application/octet-stream");
+    }
+
+      strcat(header, "Content-Type: ");
+      strcat(header, ext);
+      strcat(header,"\n");
+
+      // Get Date
+      char get_time[500];
+      time_t now = time(0);
+      struct tm tm = *gmtime(&now);
+      strftime(get_time, sizeof get_time, "%a, %d %b %Y %H:%M:%S %Z", &tm);
+      strcat(header, "Date: ");
+      strcat(header, get_time);
+      strcat(header, "\n");
+
+      // Get Last date modified of file
+      struct stat attr;
+      stat(request->http_uri, &attr);
+      char buf_LM[500];
+
+      strcat(header, "Last-Modified: ");
+      strcat(header, ctime(&attr.st_mtime));
+      strcat(header, "\n");
+
     }
     else{
-        strcat(header, STATUS_500);
-        printf("Internal ERROR");
+        strcat(header, STATUS_404);
+        printf("File NOT FOUND");
     }
 
   strcat(header, "\r\n");
   strcat(response, header);
+
+  if(!strcmp(request->http_method, "GET")){
+        strcat(response, body);
+      }
 
 }
 
