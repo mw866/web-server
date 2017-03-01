@@ -1,18 +1,23 @@
 ## Instructions
+* Server: 
 
-* Send sample requests to the server 
+    ./select_server
+
+    
+* Client: Send a sample request to the server 
 
 
     nc localhost 9034 < sample_request.txt
 
 
 ## References
+* Beej's Guide to Network Programming: https://beej.us/guide/bgnet/
+
+* IETF RFC 2616: https://www.ietf.org/rfc/rfc2616.txt
 
 * FAQs: https://pages.github.coecis.cornell.edu/cs5450/website/assignments/p1/P1_FAQ.txt
 
 * Tutorial of development environment: https://pages.github.coecis.cornell.edu/cs5450/website/assignments/p1/docker.html
-
-* Explanation of software compilation: https://help.ubuntu.com/community/CompilingSoftware
 
 * Annotated Excerpted RFC 2616 Text: https://pages.github.coecis.cornell.edu/cs5450/website/assignments/p1/rfc.txt
 
@@ -51,6 +56,8 @@ Use argument when running ./configure :
 http://stackoverflow.com/questions/20426213/error-building-ellcc
 
 ### Error: 
+
 Add 2 lines at the end of the reuqests.
+
 
 

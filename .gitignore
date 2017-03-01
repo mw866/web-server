@@ -1,4 +1,8 @@
+*.swp
+
+# CLion IDE 
 cmake-build-debug/
+.idea/
 
 # Object files
 *.o
