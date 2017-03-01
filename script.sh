@@ -9,5 +9,5 @@ kill -9 "$OUTPUT"
 sleep 5
 make clean
 make
-gcc -g -o server echo_server.c
-gdbserver 127.0.0.1:7777 ./echo_server &
+gcc -g -o select_server select_server.c
+gdbserver 127.0.0.1:7777 ./select_server &
