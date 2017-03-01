@@ -24,7 +24,7 @@ FILE *open_logfile(const char *path)
 /*
  *  Write Log to logfile
  */
-void Log(char* logfile, char *message)
+void Log(FILE* logfile, char *message)
 {
     time_t ltime = time(NULL);
     struct tm* time = localtime(&ltime);
@@ -39,7 +39,7 @@ void Log(char* logfile, char *message)
        time->tm_sec,
        message
        );
-    printf(message);
+    printf("%s", message);
 }
 
 /*

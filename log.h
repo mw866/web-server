@@ -5,5 +5,5 @@
 
 FILE *open_logfile(const char *path);
 
-void Log(char* logfile, char *message);
+void Log(FILE* logfile, char *message);
 

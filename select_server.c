@@ -1,5 +1,5 @@
 /*
-** selectserver.c -- a cheezy multiperson chat server
+** selectserver.c -- This code was modified from the select_server prodvided in the beej's guide.
 */
 
 #include <stdio.h>
@@ -13,25 +13,15 @@
 #include <netdb.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include "parse.h"
 #include <time.h>
 #include "log.h"
+#include "process_request.h"
+
 
 
 #define PORT "9034"   // port we're listening on
-char* STATUS_200 = "200_OK\n";
-char* STATUS_204 = "204_NO_CONTENT\n";  
-char* STATUS_404 = "404_NOT_FOUND\n";
-char* STATUS_411 = "411_LENGTH_REQUIRED\n";
-char* STATUS_500 = "500_INTERNAL_SERVER_ERROR\n";
-char* STATUS_501 = "501_NOT_IMPLEMENTED\n";
-char* STATUS_503 = "503_SERVICE_UNAVAILABLE\n";
-char* STATUS_505 = "505_HTTP_VERSION_NOT_SUPPORTED\n";
 
-void processRequest(char*, int, char* );
-void respond_HTTP_ver(char* , char* );
 
-// get sockaddr, IPv4 or IPv6:
 void *get_in_addr(struct sockaddr *sa)
 {
 	if (sa->sa_family == AF_INET) {
@@ -68,7 +58,6 @@ int main(void)
 
     FD_ZERO(&master);    // clear the master and temp sets
     FD_ZERO(&read_fds);
-
 
 
 	// get us a socket and bind it
@@ -161,12 +150,12 @@ int main(void)
                           // connection closed
                           // printf("selectserver: socket %d hung up\n", i);
                           Log(logfile,"selectserver: socket hung up\n");           
+                          //Close the logfile
+                          fclose(logfile);
 
                         } else {
                           Log(logfile, "Receiving...");
                         }
-                        //Close the logfile
-                        fclose(logfile);
                         close(i); // bye!
                         FD_CLR(i, &master); // remove from master set
                       } else {
@@ -176,19 +165,22 @@ int main(void)
                         printf("%s", buf);
                         printf("%d", nbytes);
 
-                        char* response = malloc(20000);
+                        //allocating memory for the response
+                        char* response = malloc(200000);
                         processRequest(buf, nbytes,response);
 
                         strcat(response, "\r\n");
                         Log(logfile,"Printing Resposne before sending it to client:\n");
                         Log(logfile, response);
 
+                        //sending the http response to the client
                         if (send(i, response, strlen(response), 0) == -1) {
                           Log(logfile,"Error sending\n");
 
                         }else{
-                          Log(logfile,"SENT RESPONSE! :D");
+                          Log(logfile,"SENT RESPONSE!");
                         }
+                        //free the allocated memory for response
                         free(response);
                       }
                 } // END handle data from client
@@ -197,157 +189,6 @@ int main(void)
     } // END for(;;)--and you thought it would never end!
     return 0;
   }
-
-  void append(char*s, size_t size, char c) {
-   int len = strlen(s);
-   s[len] = c;
-   s[len+1] = '\0';
- }
-
- void processRequest(char* buf, int nbytes, char* response) {
-  Request *request = parse(buf,nbytes);
-    //Just printing everything
-  printf("Http Method %s\n",request->http_method);
-  printf("Http Version %s\n",request->http_version);
-  printf("Http Uri %s\n",request->http_uri);
-  for(int index = 0;index < request->header_count;index++){
-    printf("Request Header\n");
-    printf("Header name %s Header Value %s\n",request->headers[index].header_name,request->headers[index].header_value);
-  }
-
-  respond_HTTP_ver(request->http_version, response);
-  strcat(response, " ");
-
-  if (!strcmp(request->http_method, "HEAD")  || !strcmp(request->http_method, "GET")) {
-    respond_get_or_head(request, response);
-  } 
-  else if (!strcmp(request->http_method, "POST")) {
-    respond_post(request, response);        
-  }
-  else {
-    strcat(response, STATUS_501);  
-  }
-}
-
-
-void respond_HTTP_ver(char* http_ver, char* response){
-  strcpy(response, http_ver);
-  if (strcmp(http_ver , "HTTP/1.1"))
-    strcpy(response, STATUS_505);
-} 
-
-const char *file_ext(const char *filename) {
-  const char *period = strrchr(filename, '.');
-  if(!period || period == filename){
-    return "";  
-  }     
-  return period + 1;
-}
-
-void respond_get_or_head(Request * request, char * response) {
-
-  char header[4096];
-  char body[1000000];
-
-  if(access(request->http_uri, F_OK ) != -1 ) {
-      // if (result != -1) {
-    strcpy(header, STATUS_200);
-    strcat(header, "Server: select_server/1.0\n");
-    strcat(header, "Connection: keep-alive\r\n");
-
-      //read from file 
-    int fd_in = open(request->http_uri, O_RDONLY);
-    char file_buf[1000000];
-    strcpy(file_buf, " ");
-    if(fd_in < 0) {
-      printf("Error 501: Failed to open the file\n"); 
-      strcat(response, STATUS_501);
-      exit(-1);                   
-    }
-    int content_length = read(fd_in,file_buf,sizeof(file_buf));
-    printf("File Buf is!! : \n%s\n", file_buf);
-    printf("************");
-      //strcat(response, file_buf);
-    char content_length_str[100];
-    sprintf(content_length_str, "%d", content_length);
-    strcat(header, "Content-length: ");
-    strcat(header, content_length_str);
-    strcat(header,"\n");
-
-    if(!strcmp(request->http_method, "GET")){
-      strcpy(body, file_buf);
-      // free(file_buf);
-    }
-
-    char ext[1024];
-
-    if (!strcmp(file_ext(request->http_uri), "html")) {
-      strcpy(ext, "text/html");
-    }
-    else if (!strcmp(file_ext(request->http_uri), "png")) {
-      strcpy(ext, "image/png");
-    }
-    else if (!strcmp(file_ext(request->http_uri), "css")) {
-      strcpy(ext, "text/css");
-    }
-    else if (!strcmp(file_ext(request->http_uri), "jpg")) {
-      strcpy(ext, "image/jpeg");
-    }
-    else if (!strcmp(file_ext(request->http_uri), "txt")) {
-      strcpy(ext, "text/plain");
-    }
-    else if (!strcmp(file_ext(request->http_uri), "gif")) {
-      strcpy(ext, "image/gif");
-    }
-    else { // default
-      strcpy(ext, "application/octet-stream");
-    }
-
-    strcat(header, "Content-Type: ");
-    strcat(header, ext);
-    strcat(header,"\n");
-
-    // Get Date
-    char get_time[500];
-    time_t now = time(0);
-    struct tm tm = *gmtime(&now);
-    strftime(get_time, sizeof get_time, "%a, %d %b %Y %H:%M:%S %Z", &tm);
-    strcat(header, "Date: ");
-    strcat(header, get_time);
-    strcat(header, "\n");
-
-    struct stat attr;
-    stat(request->http_uri, &attr);
-
-    strcat(header, "Last-Modified: ");
-    strcat(header, ctime(&attr.st_mtime));
-    strcat(header, "\n");
-
-  }
-  else{
-    strcat(header, STATUS_404);
-    printf("File NOT FOUND");
-  }
-
-  strcat(header, "\r\n");
-  strcat(response, header);
-
-  if(!strcmp(request->http_method, "GET")){
-    strcat(response, body);
-  }
-
-  // free(header);
-  // free(body);
-}
-
-
-void respond_post(Request * request, char * response)  {
-  if(access(request->http_uri, F_OK ) != -1 ) 
-    strcat(response, STATUS_200);    
-  else
-    strcat(response, STATUS_204);
-}
-
 
 
 

@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-I.
-DEPS = parse.h y.tab.h log.h
-OBJ = y.tab.o lex.yy.o parse.o select_server.o log.o
+DEPS = parse.h y.tab.h log.h process_request.h
+OBJ = y.tab.o lex.yy.o parse.o select_server.o log.o process_request.o
 FLAGS = -g -Wall
 
 default: select_server
