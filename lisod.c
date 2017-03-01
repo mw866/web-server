@@ -1,5 +1,5 @@
 /*
-** selectserver.c -- This code was modified from the select_server prodvided in the beej's guide.
+** lisod.c -- This code was modified from the select_server prodvided in the beej's guide.
 */
 
 #include <stdio.h>

@@ -1,5 +1,5 @@
 ## Instructions
-* Server: `./select_server`
+* Server: `./lisod`
 
     
 * Client: `nc localhost 9034 < test_request.txt`

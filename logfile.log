@@ -1,12 +1,12 @@
-[2017-03-01 20:49:33]: Printing Resposne before sending it to client:
-[2017-03-01 20:49:33]: HTTP/1.1 200_OK
+[2017-03-01 21:05:16]: Printing Resposne before sending it to client:
+[2017-03-01 21:05:16]: HTTP/1.1 200_OK
 Server: select_server/1.0
 Connection: keep-alive
 Content-length: 11
 Content-Type: text/html
-Date: Wed, 01 Mar 2017 20:49:33 GMT
-Last-Modified: Wed Mar  1 03:05:48 2017
+Date: Wed, 01 Mar 2017 21:05:16 GMT
+Last-Modified: Tue Feb 28 00:45:40 2017
 
 
-
-[2017-03-01 20:49:33]: SENT RESPONSE![2017-03-01 20:49:33]: selectserver: socket hung up
+hello world
+[2017-03-01 21:05:16]: SENT RESPONSE![2017-03-01 21:05:16]: selectserver: socket hung up

@@ -1,10 +1,10 @@
 CC=gcc
 CFLAGS=-I.
 DEPS = parse.h y.tab.h log.h process_request.h
-OBJ = y.tab.o lex.yy.o parse.o select_server.o log.o process_request.o
+OBJ = y.tab.o lex.yy.o parse.o lisod.o log.o process_request.o
 FLAGS = -g -Wall
 
-default: select_server
+default: lisod
 
 lex.yy.c: lexer.l
 	flex $^
@@ -15,10 +15,10 @@ y.tab.c: parser.y
 %.o: %.c $(DEPS)
 	$(CC) $(FLAGS) -c -o $@ $< $(CFLAGS)
 
-select_server: $(OBJ)
+lisod: $(OBJ)
 	#@gcc select_server.c -o select_server -Wall -Werror
 	$(CC) -o $@ $^ $(CFLAGS)
 
 clean:
 	#@rm select_server echo_client
-	rm -f *~ *.o select_server lex.yy.c y.tab.c y.tab.h
+	rm -f *~ *.o lisod lex.yy.c y.tab.c y.tab.h
