@@ -7,6 +7,7 @@ FLAGS = -g -Wall
 
 default: select_server
 
+
 lex.yy.c: lexer.l
 	flex $^
 
