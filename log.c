@@ -1,10 +1,7 @@
+#include "log.h"
 /*
  * This write log to the logfile 
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <stdarg.h>
 
 /*
  *  Open logfile
@@ -33,24 +30,25 @@ void Log(char* logfile, char *message)
     struct tm* time = localtime(&ltime);
 
     // fprintf(logfile, "%s: %s",time, message);
-       fprintf(logfile, "[%04d-%02d-%02d %02d:%02d:%02d]: %s",
-                 time->tm_year+1900,
-                 time->tm_mon+1,
-                 time->tm_mday,
-                 time->tm_hour,
-                time->tm_min,
-                 time->tm_sec,
-                 message
-           );
+    fprintf(logfile, "[%04d-%02d-%02d %02d:%02d:%02d]: %s",
+       time->tm_year+1900,
+       time->tm_mon+1,
+       time->tm_mday,
+       time->tm_hour,
+       time->tm_min,
+       time->tm_sec,
+       message
+       );
+    printf(message);
 }
 
 /*
  *  unit test 
  */
-void main()
-{
-    FILE* logfile = open_logfile("./select_server.log");
-    Log(logfile, "passed unit test: Log()");
-    fclose(logfile);
-    exit(0);
-}
+// void main()
+// {
+//     FILE* logfile = open_logfile("./logfile.log");
+//     Log(logfile, "passed unit test: Log()");
+//     fclose(logfile);
+//     exit(0);
+// }

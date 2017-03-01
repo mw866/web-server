@@ -1,12 +1,10 @@
 CC=gcc
 CFLAGS=-I.
-DEPS = parse.h y.tab.h
-OBJ = y.tab.o lex.yy.o parse.o select_server.o
+DEPS = parse.h y.tab.h log.h
+OBJ = y.tab.o lex.yy.o parse.o select_server.o log.o
 FLAGS = -g -Wall
 
-
 default: select_server
-
 
 lex.yy.c: lexer.l
 	flex $^
@@ -23,4 +21,4 @@ select_server: $(OBJ)
 
 clean:
 	#@rm select_server echo_client
-	rm -f *~ *.o select_server echo_client lex.yy.c y.tab.c y.tab.h
+	rm -f *~ *.o select_server lex.yy.c y.tab.c y.tab.h

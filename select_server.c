@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include "parse.h"
 #include <time.h>
+#include "log.h"
 
 
 #define PORT "9034"   // port we're listening on
@@ -42,6 +43,9 @@ void *get_in_addr(struct sockaddr *sa)
 
 int main(void)
 {
+    FILE* logfile = open_logfile("./logfile.log");
+    
+
     fd_set master;    // master file descriptor list
     fd_set read_fds;  // temp file descriptor list for select()
     int fdmax;        // maximum file descriptor number
@@ -65,13 +69,16 @@ int main(void)
     FD_ZERO(&master);    // clear the master and temp sets
     FD_ZERO(&read_fds);
 
+
+
 	// get us a socket and bind it
     memset(&hints, 0, sizeof hints);
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
     if ((rv = getaddrinfo(NULL, PORT, &hints, &ai)) != 0) {
-      fprintf(stderr, "selectserver: %s\n", gai_strerror(rv));
+      // fprintf(stderr, "selectserver: %s\n", gai_strerror(rv));
+      Log(logfile, "Selecting\n");
       exit(1);
     }
 
@@ -94,7 +101,8 @@ int main(void)
 
 	// if we got here, it means we didn't get bound
    if (p == NULL) {
-    fprintf(stderr, "selectserver: failed to bind\n");
+    // fprintf(stderr, "selectserver: failed to bind\n");
+    Log(logfile, "selectserver: failed to bind\n");
     exit(2);
   }
 
@@ -102,7 +110,7 @@ int main(void)
 
     // listen
   if (listen(listener, 10) == -1) {
-    perror("listen");
+    Log(logfile, "Listening...");
     exit(3);
   }
 
@@ -116,7 +124,7 @@ int main(void)
     for(;;) {
         read_fds = master; // copy it
         if (select(fdmax+1, &read_fds, NULL, NULL, NULL) == -1) {
-          perror("select");
+          Log(logfile, "Selecting..."); 
           exit(4);
         }
 
@@ -131,7 +139,8 @@ int main(void)
                   &addrlen);
 
                 if (newfd == -1) {
-                  perror("accept");
+                  Log(logfile, "Accepting...");
+
                 } else {
                         FD_SET(newfd, &master); // add to master set
                         if (newfd > fdmax) {    // keep track of the max
@@ -149,11 +158,15 @@ int main(void)
                       if ((nbytes = recv(i, buf, sizeof buf, 0)) <= 0) {
                         // got error or connection closed by client
                         if (nbytes == 0) {
-                            // connection closed
-                          printf("selectserver: socket %d hung up\n", i);
+                          // connection closed
+                          // printf("selectserver: socket %d hung up\n", i);
+                          Log(logfile,"selectserver: socket hung up\n");           
+
                         } else {
-                          perror("recv");
+                          Log(logfile, "Receiving...");
                         }
+                        //Close the logfile
+                        fclose(logfile);
                         close(i); // bye!
                         FD_CLR(i, &master); // remove from master set
                       } else {
@@ -167,17 +180,14 @@ int main(void)
                         processRequest(buf, nbytes,response);
 
                         strcat(response, "\r\n");
-
-                        printf("size of response: %d\n", strlen(response));
-                        
-                        printf("Printing Resposne before sending it to client:\n"); 
-                        printf("%s\n", response); 
+                        Log(logfile,"Printing Resposne before sending it to client:\n");
+                        Log(logfile, response);
 
                         if (send(i, response, strlen(response), 0) == -1) {
-                          printf("Error sending");
+                          Log(logfile,"Error sending\n");
+
                         }else{
-                          printf("SENT RESPONSE! :D");
-                            // printf(response);
+                          Log(logfile,"SENT RESPONSE! :D");
                         }
                         free(response);
                       }
@@ -185,7 +195,6 @@ int main(void)
             } // END got new incoming connection
         } // END looping through file descriptors
     } // END for(;;)--and you thought it would never end!
-    
     return 0;
   }
 
@@ -205,12 +214,7 @@ int main(void)
     printf("Request Header\n");
     printf("Header name %s Header Value %s\n",request->headers[index].header_name,request->headers[index].header_value);
   }
-     // strcpy(response, "");
-    // memset(response, 0, sizeof(response));
 
-    // char *header = malloc(4096);
-    // //put a space infront of the header
-    // strcpy(header, " ");
   respond_HTTP_ver(request->http_version, response);
   strcat(response, " ");
 
@@ -275,11 +279,8 @@ void respond_get_or_head(Request * request, char * response) {
       // free(file_buf);
     }
 
-      // Content type
     char ext[1024];
 
-
-     //TODO: USE SWITCH
     if (!strcmp(file_ext(request->http_uri), "html")) {
       strcpy(ext, "text/html");
     }
@@ -306,7 +307,7 @@ void respond_get_or_head(Request * request, char * response) {
     strcat(header, ext);
     strcat(header,"\n");
 
-      // Get Date
+    // Get Date
     char get_time[500];
     time_t now = time(0);
     struct tm tm = *gmtime(&now);

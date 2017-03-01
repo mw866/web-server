@@ -1,4 +1,4 @@
-GET /vagrant/project-1/www/logo.jpg HTTP/1.1
+GET /vagrant/project-1/www/index.html HTTP/1.1
 Host: localhost
 Connection: keep-alive
 Accept: text/html
