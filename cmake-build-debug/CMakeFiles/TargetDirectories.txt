@@ -1,3 +1,0 @@
-/Users/kylin1989/VM/dev/web_server/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/kylin1989/VM/dev/web_server/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/kylin1989/VM/dev/web_server/cmake-build-debug/CMakeFiles/web_server.dir
