@@ -1,13 +1,8 @@
 ## Instructions
-* Server: 
-
-    ./select_server
+* Server: `./select_server`
 
     
-* Client: Send a sample request to the server 
-
-
-    nc localhost 9034 < sample_request.txt
+* Client: `nc localhost 9034 < test_request.txt`
 
 
 ## References
@@ -22,13 +17,13 @@
 * Annotated Excerpted RFC 2616 Text: https://pages.github.coecis.cornell.edu/cs5450/website/assignments/p1/rfc.txt
 
 * CMU Liso Projects: 
-** https://github.com/wshen0123/cmu-15641-lisod
-
-** https://github.com/zhuansunxt/Liso
-
-** https://github.com/mindbergh/Liso
-
-** https://github.com/mydagobah/Lisod
+	* https://github.com/wshen0123/cmu-15641-lisod
+	
+	* https://github.com/zhuansunxt/Liso
+	
+	* https://github.com/mindbergh/Liso
+	
+	* https://github.com/mydagobah/Lisod
 
 * Makefile Tutorial: http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 
@@ -37,7 +32,7 @@
 
 ### Error: Cannot load symbol file
 
-In case you’d like to debug Linux target from macOS host, you have to use GDB version compiled with --target=x86_64-linux-gnu flag. Get the binutils-gdb sources from the Git repository, switch branch to gdb-7.11.1-release and build like this:
+In case you’d like to debug Linux target from macOS host, you have to use GDB version compiled with `--target=x86_64-linux-gnu` flag. Get the binutils-gdb sources from the Git repository, switch branch to gdb-7.11.1-release and build like this:
 
 
     ./configure --disable-werror --target=x86_64-linux-gnu --prefix=/Users/kylin1989/Downloads/binutils-gdb-linux
@@ -55,7 +50,7 @@ Use argument when running ./configure :
 
 http://stackoverflow.com/questions/20426213/error-building-ellcc
 
-### Error: 
+### Error: 'Segmentation Errror'
 
 Add 2 lines at the end of the reuqests.
 
