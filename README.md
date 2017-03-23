@@ -28,6 +28,11 @@
 * Makefile Tutorial: http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 
 
+         $@ and $^:the left and right sides of the :, respectively, to make the overall compilation rule more general. In the example below, all of the include files should be listed as part of the macro DEPS, and all of the object files should be listed as part of the macro OBJ.
+        
+
+
+
 ## Troubleshooting
 
 ### Error: Cannot load symbol file
