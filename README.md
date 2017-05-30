@@ -1,3 +1,7 @@
+# Web Server
+
+A web server that implements a subset of the HTTP 1.1 RFC 2616 using socket API in C.
+
 ## Instructions
 * Server: `./lisod`
 
